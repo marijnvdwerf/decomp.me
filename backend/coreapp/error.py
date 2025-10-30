@@ -18,25 +18,39 @@ def custom_exception_handler(exc: Exception, context: Any) -> Optional[Response]
 
     if isinstance(exc, SubprocessError):
         detail = exc.render_message()
+        payload: dict[str, Any] = {
+            "code": exc.SUBPROCESS_NAME,
+            "detail": detail or exc.msg,
+        }
+        if exc.command:
+            payload["command"] = exc.command
+        if exc.stdout:
+            payload["stdout"] = exc.stdout
+        if exc.stderr and exc.stderr != exc.stdout:
+            payload["stderr"] = exc.stderr
+
         response = Response(
-            data={
-                "code": exc.SUBPROCESS_NAME,
-                "detail": detail,
-                **({"stdout": exc.stdout} if exc.stdout else {}),
-                **({"stderr": exc.stderr} if exc.stderr else {}),
-            },
+            data=payload,
             status=HTTP_400_BAD_REQUEST,
         )
-        logger.error(
-            "Subprocess error in %s: %s",
-            exc.SUBPROCESS_NAME,
-            detail or exc.msg,
-            extra={
-                "stdout": exc.stdout,
-                "stderr": exc.stderr,
-                "command": exc.command,
-            },
-        )
+
+        log_lines = [
+            f"Subprocess error in {exc.SUBPROCESS_NAME}",
+        ]
+        if exc.command:
+            log_lines.append(f"Command: {exc.command}")
+        if detail:
+            log_lines.append("Message:")
+            log_lines.append(detail)
+        else:
+            log_lines.append(f"Message: {exc.msg}")
+        if exc.stdout:
+            log_lines.append("Stdout:")
+            log_lines.append(exc.stdout)
+        if exc.stderr and exc.stderr != exc.stdout:
+            log_lines.append("Stderr:")
+            log_lines.append(exc.stderr)
+        logger.error("\n".join(log_lines))
     elif isinstance(exc, AssertionError) or isinstance(exc, IntegrityError):
         response = Response(
             data={
