@@ -1,0 +1,72 @@
+# Minimal production-style stack using the published backend image and only Win32 compilers.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-decompme}
+      - POSTGRES_USER=${SERVICE_USER_POSTGRES}
+      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    image: ghcr.io/marijnvdwerf/decompme-backend:prod-latest
+    platform: linux/amd64
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SECRET_KEY=${SERVICE_PASSWORD_BACKEND}
+      - DATABASE_URL=postgresql://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${POSTGRES_DB:-decompme}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-backend,localhost,127.0.0.1}
+      - USE_SANDBOX_JAIL=${USE_SANDBOX_JAIL:-on}
+      - SANDBOX_DISABLE_PROC=${SANDBOX_DISABLE_PROC:-true}
+      - COMPILER_BASE_PATH=${COMPILER_BASE_PATH:-/backend/compilers}
+      - LIBRARY_BASE_PATH=${LIBRARY_BASE_PATH:-/backend/libraries}
+      - LOCAL_FILE_DIR=${LOCAL_FILE_DIR:-/backend/local_files}
+      - WINEPREFIX=${WINEPREFIX:-/tmp/wine}
+      - DATABASE_HOST=${DATABASE_HOST:-postgres}
+      - DATABASE_PORT=${DATABASE_PORT:-5432}
+      - BACKEND_HOST=${BACKEND_HOST:-0.0.0.0}
+      - BACKEND_PORT=${BACKEND_PORT:-8000}
+      - BACKEND_WORKERS=${BACKEND_WORKERS:-4}
+      - SERVICE_URL_BACKEND_8000
+      - PUBLIC_API_URL=$SERVICE_URL_BACKEND_8000
+      - ENABLE_WIN32_SUPPORT=YES
+      - ENABLE_DREAMCAST_SUPPORT=NO
+      - ENABLE_GBA_SUPPORT=NO
+      - ENABLE_GC_WII_SUPPORT=NO
+      - ENABLE_MACOSX_SUPPORT=NO
+      - ENABLE_MSDOS_SUPPORT=NO
+      - ENABLE_N3DS_SUPPORT=NO
+      - ENABLE_N64_SUPPORT=NO
+      - ENABLE_NDS_ARM9_SUPPORT=NO
+      - ENABLE_PS1_SUPPORT=NO
+      - ENABLE_PS2_SUPPORT=NO
+      - ENABLE_PSP_SUPPORT=NO
+      - ENABLE_SATURN_SUPPORT=NO
+      - ENABLE_SWITCH_SUPPORT=NO
+    volumes:
+      - ./backend/compilers:/backend/compilers
+      - ./backend/libraries:/backend/libraries
+      - ./backend/local_files:/backend/local_files
+      - ./backend/static:/backend/static
+      - ./backend/media:/backend/media
+    cap_drop:
+      - all
+    cap_add:
+      - setuid
+      - setgid
+      - setfcap
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
+    tmpfs:
+      - /sandbox/tmp:exec,uid=1000,gid=1000,size=64M,mode=0700
+    restart: unless-stopped

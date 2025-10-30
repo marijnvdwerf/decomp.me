@@ -4,11 +4,12 @@ This guide explains how to run the decomp.me backend in [Coolify](https://coolif
 
 ## Container Image
 
-- Image name: `ghcr.io/decompme/decompme-backend`
+- Image name: `ghcr.io/marijnvdwerf/decompme-backend`
 - Tags:
   - `prod-latest`: latest build from the `main` branch.
   - `prod-{git-sha}`: immutable image for each commit.
 - Port exposed: `8000`
+- Architecture: `linux/amd64` (requires an x86_64 host or amd64 emulation via QEMU/binfmt on ARM servers)
 
 ## Environment
 

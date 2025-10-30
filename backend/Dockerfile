@@ -180,6 +180,8 @@ COPY compilers /backend/compilers
 
 COPY coreapp /backend/coreapp
 
+RUN SECRET_KEY=secret DATABASE_URL=sqlite://:memory: uv run /backend/manage.py collectstatic --noinput
+
 COPY docker_prod_entrypoint.sh /backend/docker_prod_entrypoint.sh
 
 ENTRYPOINT ["/backend/docker_prod_entrypoint.sh"]

@@ -34,6 +34,7 @@ def custom_exception_handler(exc: Exception, context: Any) -> Optional[Response]
             extra={
                 "stdout": exc.stdout,
                 "stderr": exc.stderr,
+                "command": exc.command,
             },
         )
     elif isinstance(exc, AssertionError) or isinstance(exc, IntegrityError):
@@ -55,13 +56,26 @@ class SubprocessError(Exception):
     msg: str
     stdout: str
     stderr: str
+    command: Optional[str]
 
-    def __init__(self, message: str, stdout: str = "", stderr: str = ""):
-        self.msg = f"{self.SUBPROCESS_NAME} error: {message}".strip()
+    def __init__(
+        self,
+        message: str,
+        stdout: str = "",
+        stderr: str = "",
+        command: Optional[str] = None,
+    ):
+        base_message = message.strip()
+        self.msg = (
+            f"{self.SUBPROCESS_NAME} error: {base_message}"
+            if base_message
+            else f"{self.SUBPROCESS_NAME} error"
+        )
 
         super().__init__(self.msg)
         self.stdout = stdout or ""
         self.stderr = stderr or ""
+        self.command = command
 
     def render_message(self) -> str:
         text = (self.stdout or "").strip()
@@ -72,15 +86,28 @@ class SubprocessError(Exception):
             return text
         return self.msg
 
-    @staticmethod
-    def from_process_error(ex: CalledProcessError) -> "SubprocessError":
+    @classmethod
+    def from_process_error(cls, ex: CalledProcessError) -> "SubprocessError":
         stdout = (ex.stdout or "").strip()
         stderr = (ex.stderr or "").strip()
-        message = stdout or stderr or f"{ex.cmd[0]} returned {ex.returncode}"
-        error = SubprocessError(
+        command: Optional[str]
+        if isinstance(ex.cmd, (list, tuple)):
+            command = " ".join(str(part) for part in ex.cmd)
+        else:
+            command = str(ex.cmd) if ex.cmd is not None else None
+
+        message = stdout or stderr
+        if not message:
+            if command:
+                message = f"{command} returned {ex.returncode}"
+            else:
+                message = f"Process returned {ex.returncode}"
+
+        error = cls(
             message,
             stdout=stdout,
             stderr=stderr,
+            command=command,
         )
         return error
 
@@ -108,9 +135,9 @@ class SandboxError(SubprocessError):
 class AssemblyError(SubprocessError):
     SUBPROCESS_NAME: ClassVar[str] = "Compiler"
 
-    @staticmethod
-    def from_process_error(ex: CalledProcessError) -> "SubprocessError":
-        error = super(AssemblyError, AssemblyError).from_process_error(ex)
+    @classmethod
+    def from_process_error(cls, ex: CalledProcessError) -> "SubprocessError":
+        error = super().from_process_error(ex)
 
         error_lines = []
         for line in (ex.stdout or "").splitlines():
