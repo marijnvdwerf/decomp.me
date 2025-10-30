@@ -33,7 +33,7 @@ fi
 BLACKFIRE_SOCKET=${BLACKFIRE_AGENT_SOCKET:-}
 if [ -n "$BLACKFIRE_SOCKET" ]; then
   echo "BLACKFIRE_AGENT_SOCKET detected (${BLACKFIRE_SOCKET}). Launching Gunicorn under Blackfire."
-  exec uv run blackfire-python --socket "${BLACKFIRE_SOCKET}" -- gunicorn -w ${WORKERS} decompme.wsgi --bind ${BE_HOST}:${BE_PORT}
+  exec uv run blackfire-python gunicorn -w ${WORKERS} decompme.wsgi --bind ${BE_HOST}:${BE_PORT}
 fi
 
 exec uv run gunicorn -w ${WORKERS} decompme.wsgi --bind ${BE_HOST}:${BE_PORT}
