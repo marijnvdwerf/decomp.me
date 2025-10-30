@@ -1,3 +1,4 @@
+import logging
 from sqlite3 import IntegrityError
 from subprocess import CalledProcessError
 from typing import Any, ClassVar, Optional
@@ -7,6 +8,8 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER
 
 from rest_framework.views import exception_handler
 
+logger = logging.getLogger(__name__)
+
 
 def custom_exception_handler(exc: Exception, context: Any) -> Optional[Response]:
     # Call REST framework's default exception handler first,
@@ -14,12 +17,24 @@ def custom_exception_handler(exc: Exception, context: Any) -> Optional[Response]
     response = exception_handler(exc, context)
 
     if isinstance(exc, SubprocessError):
+        detail = exc.render_message()
         response = Response(
             data={
                 "code": exc.SUBPROCESS_NAME,
-                "detail": exc.msg,
+                "detail": detail,
+                **({"stdout": exc.stdout} if exc.stdout else {}),
+                **({"stderr": exc.stderr} if exc.stderr else {}),
             },
             status=HTTP_400_BAD_REQUEST,
+        )
+        logger.error(
+            "Subprocess error in %s: %s",
+            exc.SUBPROCESS_NAME,
+            detail or exc.msg,
+            extra={
+                "stdout": exc.stdout,
+                "stderr": exc.stderr,
+            },
         )
     elif isinstance(exc, AssertionError) or isinstance(exc, IntegrityError):
         response = Response(
@@ -41,19 +56,32 @@ class SubprocessError(Exception):
     stdout: str
     stderr: str
 
-    def __init__(self, message: str):
-        self.msg = f"{self.SUBPROCESS_NAME} error: {message}"
+    def __init__(self, message: str, stdout: str = "", stderr: str = ""):
+        self.msg = f"{self.SUBPROCESS_NAME} error: {message}".strip()
 
         super().__init__(self.msg)
-        self.stdout = ""
-        self.stderr = ""
+        self.stdout = stdout or ""
+        self.stderr = stderr or ""
+
+    def render_message(self) -> str:
+        text = (self.stdout or "").strip()
+        if text:
+            return text
+        text = (self.stderr or "").strip()
+        if text:
+            return text
+        return self.msg
 
     @staticmethod
     def from_process_error(ex: CalledProcessError) -> "SubprocessError":
-        error = SubprocessError(f"{ex.cmd[0]} returned {ex.returncode}")
-        error.stdout = ex.stdout
-        error.stderr = ex.stderr
-        error.msg = ex.stdout
+        stdout = (ex.stdout or "").strip()
+        stderr = (ex.stderr or "").strip()
+        message = stdout or stderr or f"{ex.cmd[0]} returned {ex.returncode}"
+        error = SubprocessError(
+            message,
+            stdout=stdout,
+            stderr=stderr,
+        )
         return error
 
 
@@ -85,11 +113,13 @@ class AssemblyError(SubprocessError):
         error = super(AssemblyError, AssemblyError).from_process_error(ex)
 
         error_lines = []
-        for line in ex.stdout.splitlines():
+        for line in (ex.stdout or "").splitlines():
             if "asm.s:" in line:
                 error_lines.append(line[line.find("asm.s:") + len("asm.s:") :].strip())
             else:
                 error_lines.append(line)
         error.msg = "\n".join(error_lines)
+        if not error.msg:
+            error.msg = error.render_message()
 
         return error
