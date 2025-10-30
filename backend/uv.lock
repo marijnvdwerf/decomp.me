@@ -47,6 +47,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "asm-differ" },
+    { name = "blackfire" },
     { name = "debugpy" },
     { name = "django" },
     { name = "django-cleanup" },
@@ -87,6 +88,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "asm-differ", git = "https://github.com/simonlindholm/asm-differ.git" },
+    { name = "blackfire", specifier = ">=1.20.34" },
     { name = "debugpy", specifier = ">=1.8.13" },
     { name = "django", specifier = ">=5.1.3" },
     { name = "django-cleanup", specifier = ">=9.0.0" },
@@ -122,6 +124,42 @@ dev = [
     { name = "ruff", specifier = ">=0.8.0" },
     { name = "types-requests", specifier = ">=2.32.0.20241016" },
     { name = "usort", specifier = ">=1.0.8" },
+]
+
+[[package]]
+name = "blackfire"
+version = "1.20.34"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/64/7c/a97c055cce23b617c831300adea07e79f168f6e3d18bd23e5f31e272045b/blackfire-1.20.34-cp310-cp310-macosx_15_0_arm64.whl", hash = "sha256:02c84483992a8b094a1b4d30d734193886f5ce2039183692e62818445c6f05ff", size = 91604, upload-time = "2025-10-27T10:56:04.407Z" },
+    { url = "https://files.pythonhosted.org/packages/67/05/6cdf86f6c5c55f1640e9a4df01ba941dda5cf41e8e708a263c7bbf7004fd/blackfire-1.20.34-cp310-cp310-macosx_15_0_x86_64.whl", hash = "sha256:1a9994a7f56789cb85d1801c9c9253f44259bf2f5c8d6f04ccdd42568c09268d", size = 91069, upload-time = "2025-10-27T10:56:07.309Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/92/6bb948fa9c3ae86e791b502e8d3742ada31e761272630c5e898b9df8c5c4/blackfire-1.20.34-cp310-cp310-manylinux2014_aarch64.whl", hash = "sha256:77cb920948b34fcc7ada9cbffd4076eaad2f00ba842083e32feb6ebbb5571d0d", size = 91071, upload-time = "2025-10-27T10:56:04.649Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/52/aaaac905a28813c6c71f6b712290c786f617a17e0605783dd7c72699c42f/blackfire-1.20.34-cp310-cp310-manylinux2014_x86_64.whl", hash = "sha256:35052798ea4fb67d60442664b31ca0beea8fda4de0b6749749524d13778d2b8d", size = 92958, upload-time = "2025-10-27T10:56:07.925Z" },
+    { url = "https://files.pythonhosted.org/packages/9d/79/2b042632cf6e1f3cee3553a97817efdabc0894b6cf4c28da725c47fb0614/blackfire-1.20.34-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:294414fbff86694a2fe5bd832f0a552eb5b0ec7dfa9e6686feaf17355244de16", size = 95128, upload-time = "2025-10-27T10:56:04.037Z" },
+    { url = "https://files.pythonhosted.org/packages/00/32/3e41af9600bdf90f0cb1da7de270a0b001044086a1e5475e2dfd861392aa/blackfire-1.20.34-cp310-cp310-win_amd64.whl", hash = "sha256:328dd07a2a9210b42ca9fb6630130288f9f7db8b16a0aa9d9431611de243ce6c", size = 95139, upload-time = "2025-10-27T11:11:09.409Z" },
+    { url = "https://files.pythonhosted.org/packages/50/e3/d5752ab2142aaf3e217bfcc2d94940e71ffbcfc1b1611fc665c79daa225e/blackfire-1.20.34-cp311-cp311-macosx_15_0_arm64.whl", hash = "sha256:ea3b9e53102c66184be154f0b3d079c5e9c50acc28dcc0d6a36b8aa43e539365", size = 91923, upload-time = "2025-10-27T10:56:09.656Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/5f/7256f0527f9877c01ec0603d74f794726b65917561b1e863395754318a95/blackfire-1.20.34-cp311-cp311-macosx_15_0_x86_64.whl", hash = "sha256:78835af183ee2718045746dbef71613b7f7c2f13a2bb5616d30459675297bfdf", size = 91437, upload-time = "2025-10-27T10:56:12.205Z" },
+    { url = "https://files.pythonhosted.org/packages/43/9c/e99256cf20d0ce60d33c3cf9dda6133bbaab5ead56728c2bdfa5f213688b/blackfire-1.20.34-cp311-cp311-manylinux2014_aarch64.whl", hash = "sha256:33e204a8d300c9ae3b97fc603613d61c5cd04ed660883a80ce06a3a26205656a", size = 91362, upload-time = "2025-10-27T10:56:10.494Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/d7/ad54e650d4be48118b124a0ba4dc718802bee77b3ed0e2fa7064d2018eb3/blackfire-1.20.34-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:52ee6aa227c5eba9835aeafb87961b87eaa403815d70fb0d2d6ceab50fefb0d0", size = 93298, upload-time = "2025-10-27T10:56:13.106Z" },
+    { url = "https://files.pythonhosted.org/packages/0b/98/b745147ae2942f213a3f02a900481748f533f94a980118409b5fa873edaf/blackfire-1.20.34-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:40cc6f160432c6efdce2c0248ba1318cb9d2b7ad92eb420df9610438455da425", size = 95494, upload-time = "2025-10-27T10:56:06.366Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/0b/95bee483cf41da4236413b467e0c648dda138657f9337d025b89b0b40dc2/blackfire-1.20.34-cp311-cp311-win_amd64.whl", hash = "sha256:16c35e0f69a199998adb10beee5b4eb684c8ba9630c07f78b4e3558601e59b10", size = 95115, upload-time = "2025-10-27T11:11:11.256Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/78/4c4008f56bdd24eaebcf2e8b7bc466d1fa02e5f43089e4efb9d2bf252cc4/blackfire-1.20.34-cp312-cp312-macosx_15_0_arm64.whl", hash = "sha256:857733ff8da4520d7f4e0b100d83f9532d58ef7008fefb6afaedfceceb035e56", size = 92839, upload-time = "2025-10-27T10:56:14.631Z" },
+    { url = "https://files.pythonhosted.org/packages/1f/6b/a11d576a81ff4aa5e5a51a30d07c3e82d1e489b78c449691f15f7819d742/blackfire-1.20.34-cp312-cp312-macosx_15_0_x86_64.whl", hash = "sha256:a4fc1d83a302951f959d3e9ce9a61d8b16f5b1bf46beb202ef819025af35e97e", size = 92315, upload-time = "2025-10-27T10:56:16.705Z" },
+    { url = "https://files.pythonhosted.org/packages/a2/99/47fed278631dc5aa72cf3623f1cf9d069c91b88b37cc42580bc0e821f379/blackfire-1.20.34-cp312-cp312-manylinux2014_aarch64.whl", hash = "sha256:18f212173ba4cd83a6759952fa9f38b3230691f7bce627f141be441e63ce859a", size = 92304, upload-time = "2025-10-27T10:56:15.241Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/9a/5c2be20d2aa622aa80c9fcc343c95012cd1495806a9096b4cb961fe354ee/blackfire-1.20.34-cp312-cp312-manylinux2014_x86_64.whl", hash = "sha256:daca466f471007e5734c92c5de0a0973c0ec3d425fa87e14cde135cf9400d004", size = 94244, upload-time = "2025-10-27T10:56:17.481Z" },
+    { url = "https://files.pythonhosted.org/packages/8d/9d/eb016bfb5480467d4473501665bb7847a9e848b42e9e596d5e7931152d3f/blackfire-1.20.34-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:5d47c578910eb2fd09f254436b5fcecb58f016910ca43cc1f4316f4a97304a36", size = 96483, upload-time = "2025-10-27T10:56:08.865Z" },
+    { url = "https://files.pythonhosted.org/packages/49/e9/334e9a8c0c9426fe431f63a8db371606fdc7fbc63559a671461f7bdae390/blackfire-1.20.34-cp312-cp312-win_amd64.whl", hash = "sha256:eb25ff7de507bf48031bcaf4c0fdff81fd29f7069b91800456da3ec1627038c7", size = 95423, upload-time = "2025-10-27T11:11:12.688Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/57/80c34da9cc84245a2af458ffb2fa21375e2b22ed011315043460e802d111/blackfire-1.20.34-cp313-cp313-macosx_15_0_arm64.whl", hash = "sha256:1d5c7e3506843b03f2a5984d34309e65cc11dc6a4b553ed7bfda72b3adf01396", size = 92705, upload-time = "2025-10-27T10:56:19.001Z" },
+    { url = "https://files.pythonhosted.org/packages/19/cf/ea6514f14218eed7213a418053e3fd1f172993cdb23f5eaef2f97d5f9a24/blackfire-1.20.34-cp313-cp313-macosx_15_0_x86_64.whl", hash = "sha256:0dfb8f24998d0254ba51a32c653b68a793363b84f22decad12d3eec409e1515a", size = 92192, upload-time = "2025-10-27T10:56:20.412Z" },
+    { url = "https://files.pythonhosted.org/packages/b3/65/50ec37d58b3e712d49cb8f6d5741bd06303c9cb7772646de1c43453d3f2b/blackfire-1.20.34-cp313-cp313-manylinux2014_aarch64.whl", hash = "sha256:d47628b88c59108d860436b4d3fe2859b421c7d608ecf5b7698122547112c00f", size = 92159, upload-time = "2025-10-27T10:56:19.695Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/83/e1340524a5ff007fd3e418abe959b1a7da94a3bae8628efdb1486386e05b/blackfire-1.20.34-cp313-cp313-manylinux2014_x86_64.whl", hash = "sha256:2ed702d8fb5d92ed72df6233f1fbeb24e475dc144467f131744ec114fc9fd8a1", size = 94122, upload-time = "2025-10-27T10:56:21.385Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/be/48a658d792bdacbd5b37fa50bf77ed17b3eedcdb96d72de70cf45f752df5/blackfire-1.20.34-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:281bab0f3eebdb45c5114106efb317eec7863a200c9bf64680d2b630cadb056d", size = 96402, upload-time = "2025-10-27T10:56:11.473Z" },
+    { url = "https://files.pythonhosted.org/packages/98/4e/c89c8f3df7cc583e0355988c74efe33dc7c8ce13aec75dd7e5fc6bed83cb/blackfire-1.20.34-cp313-cp313-win_amd64.whl", hash = "sha256:94261a46f05bbd79704e0da9794deaa1f5660d9ca5a3d3b69c3899bd05b3a753", size = 95365, upload-time = "2025-10-27T11:11:14.201Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/68/b51634d6e09d930a2c2b8a6a3e7a74ae84a9fc0ca9f642214e0f8d89ba7b/blackfire-1.20.34-cp314-cp314-macosx_15_0_arm64.whl", hash = "sha256:c132eae5a6991ab6980d4c35ca1329ee09cf76ecb2106454cdda02cc4e0a3f26", size = 92632, upload-time = "2025-10-27T10:56:21.871Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/a2/6b7bb7ceb59f49b7e747e63d1274e4d0d0d01f12c769ab86ae21cf6a2a3d/blackfire-1.20.34-cp314-cp314-macosx_15_0_x86_64.whl", hash = "sha256:851db9dabe7838841891f1e021852d629a3381ebc4b5df73ef2c3682125e1087", size = 92164, upload-time = "2025-10-27T10:56:23.516Z" },
+    { url = "https://files.pythonhosted.org/packages/59/27/e61c8a4c401de773a70397c1dee65e3de65d0e6dadf6a5f22a43c97b6e1b/blackfire-1.20.34-cp314-cp314-manylinux2014_aarch64.whl", hash = "sha256:91b42d84bc4a38dd4a2f2634cccf481d7e74f02c1936e715d191c0f5a8dd0b4e", size = 92134, upload-time = "2025-10-27T10:56:22.841Z" },
+    { url = "https://files.pythonhosted.org/packages/80/cd/c1a58a8474cd7b19b54ef640fdf41093f3383e0e460ddc5ee818598f63c2/blackfire-1.20.34-cp314-cp314-manylinux2014_x86_64.whl", hash = "sha256:f2b9ddf00e73507290ac8d01434c6ddee96c6722e8ca53acaa24ec572ed4eabe", size = 94048, upload-time = "2025-10-27T10:56:24.259Z" },
+    { url = "https://files.pythonhosted.org/packages/21/d5/e622e9c89223e213221cb995fabea7934c49a7c9b578ac396fe411b83375/blackfire-1.20.34-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:1efa79b50d96a93334d39fe68d1ab6ee11faadfb849eff07e9066fe3ed10f7ce", size = 96361, upload-time = "2025-10-27T10:56:14Z" },
 ]
 
 [[package]]

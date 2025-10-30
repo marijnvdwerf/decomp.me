@@ -31,6 +31,7 @@ dependencies = [
     "debugpy>=1.8.13",
     "gunicorn>=23.0.0",
     "whitenoise>=6.11.0",
+    "blackfire>=1.20.34",
 ]
 
 [dependency-groups]
