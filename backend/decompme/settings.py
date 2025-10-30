@@ -82,6 +82,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "coreapp.middleware.strip_cookie_vary",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -156,6 +157,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = env("STATIC_URL")
 STATIC_ROOT = env("STATIC_ROOT")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files (user uploads)
 MEDIA_ROOT = env("MEDIA_ROOT")

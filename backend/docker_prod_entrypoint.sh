@@ -30,4 +30,6 @@ else
   echo "regedit command not found. Skipping registry import."
 fi
 
+uv run /backend/manage.py collectstatic --noinput
+
 uv run gunicorn -w ${WORKERS} decompme.wsgi --bind ${BE_HOST}:${BE_PORT}
